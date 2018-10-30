@@ -1,1 +1,17 @@
-134666666666
+from multiprocessing import Pool
+
+import requests
+def demo(i):
+    url="https://sohu.com-v-sohu.com/20181004/13247_a0270b26/1000k/hls/ed38bed61a2%03d.ts"%i
+    print(url)
+    head={"User-Agent":"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36"}
+    r=requests.get(url,headers=head)
+    with open('./mp4/{}'.format(url[-10:]),'wb') as f:
+        f.write(r.content)
+
+if __name__=='__main__':
+    pool=Pool(20)
+    for i in range(1684):
+        pool.apply_async(demo,(i,))
+    pool.close()
+    pool.join()
